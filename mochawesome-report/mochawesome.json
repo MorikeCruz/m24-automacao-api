@@ -1,0 +1,176 @@
+{
+  "stats": {
+    "suites": 2,
+    "tests": 2,
+    "passes": 2,
+    "pending": 0,
+    "failures": 0,
+    "start": "2026-10-03T17:41:30.801Z",
+    "end": "2026-10-03T17:41:32.297Z",
+    "duration": 1496,
+    "testsRegistered": 2,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "f871f98a-3946-433a-ae8c-cb3b028164f0",
+      "title": "",
+      "fullFile": "",
+      "file": "",
+      "beforeHooks": [
+        {
+          "title": "\"before each\" hook in \"{root}\"",
+          "fullTitle": "\"before each\" hook in \"{root}\"",
+          "timedOut": false,
+          "duration": 306,
+          "state": null,
+          "speed": null,
+          "pass": false,
+          "fail": false,
+          "pending": false,
+          "context": null,
+          "code": "token = await spec()\n    .post(URL)\n    .withGraphQLQuery(\n        'mutation AuthUser($email: String, $password: String) {' +\n        ' authUser(email: $email, password: $password) {' +\n        ' success' +\n        ' token' +\n        ' }' +\n        '}'\n    )\n    .withGraphQLVariables({\n        email: 'admin@admin.com',\n        password: 'admin123'\n    })\n    .stores('data.authUser.token');",
+          "err": {},
+          "uuid": "8100adb2-085c-4e22-8d07-0569c00ae210",
+          "parentUUID": "f871f98a-3946-433a-ae8c-cb3b028164f0",
+          "isHook": true,
+          "skipped": false
+        },
+        {
+          "title": "\"before each\" hook in \"{root}\"",
+          "fullTitle": "\"before each\" hook in \"{root}\"",
+          "timedOut": false,
+          "duration": 307,
+          "state": null,
+          "speed": null,
+          "pass": false,
+          "fail": false,
+          "pending": false,
+          "context": null,
+          "code": "token = await spec()\n    .post(URL)\n    .withGraphQLQuery(\n        'mutation AuthUser($email: String, $password: String) {' +\n        ' authUser(email: $email, password: $password) {' +\n        ' success' +\n        ' token' +\n        ' }' +\n        '}'\n    )\n    .withGraphQLVariables({\n        email: 'admin@admin.com',\n        password: 'admin123'\n    })\n    .stores('data.authUser.token');",
+          "err": {},
+          "uuid": "64dd807e-4b53-4f8f-b372-bf7aa66276eb",
+          "parentUUID": "f871f98a-3946-433a-ae8c-cb3b028164f0",
+          "isHook": true,
+          "skipped": false
+        }
+      ],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "7ba646b5-7512-49b9-8416-3a2a4f032378",
+          "title": "Contrato - Categoria",
+          "fullFile": "C:\\Users\\marco\\Desktop\\m24-automacao-api\\test\\contract\\category.contract.test.js",
+          "file": "\\test\\contract\\category.contract.test.js",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "deve validar o contrato do addCategory",
+              "fullTitle": "Contrato - Categoria deve validar o contrato do addCategory",
+              "timedOut": false,
+              "duration": 67,
+              "state": "passed",
+              "speed": "medium",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await spec()\n            .post(URL)\n            .withHeaders('Authorization', token)\n            .withGraphQLQuery(\n                'mutation {' +\n                ' addCategory(' +\n                ' name: \"Contrato Categoria M24\"' +\n                ' photo: \"https://example.com/contrato.jpg\"' +\n                ' ) {' +\n                ' name' +\n                ' photo' +\n                ' }' +\n                '}'\n            )\n            .expectStatus(200)\n            .expectJsonMatch({\n                data: {\n                    addCategory: {\n                        name: null,\n                        photo: null\n                    }\n                }\n            });",
+              "err": {},
+              "uuid": "745ce223-9981-4db2-95ba-c4657e9f6cb8",
+              "parentUUID": "7ba646b5-7512-49b9-8416-3a2a4f032378",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "745ce223-9981-4db2-95ba-c4657e9f6cb8"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 67,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        },
+        {
+          "uuid": "b6fc9983-a24a-4789-8940-16c731fe345d",
+          "title": "Contrato - Produto",
+          "fullFile": "C:\\Users\\marco\\Desktop\\m24-automacao-api\\test\\contract\\product.contract.test.js",
+          "file": "\\test\\contract\\product.contract.test.js",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "deve validar o contrato do addProduct",
+              "fullTitle": "Contrato - Produto deve validar o contrato do addProduct",
+              "timedOut": false,
+              "duration": 71,
+              "state": "passed",
+              "speed": "medium",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await spec()\n            .post(URL)\n            .withHeaders('Authorization', token)\n            .withGraphQLQuery(\n                'mutation {' +\n                ' addProduct(' +\n                ' name: \"Contrato Produto M24\"' +\n                ' description: \"Produto para teste de contrato\"' +\n                ' price: 100' +\n                ' specialPrice: 90' +\n                ' quantity: 10' +\n                ' visible: true' +\n                ' ) {' +\n                ' name' +\n                ' description' +\n                ' price' +\n                ' specialPrice' +\n                ' quantity' +\n                ' visible' +\n                ' }' +\n                '}'\n            )\n            .expectStatus(200)\n            .expectJsonMatch({\n                data: {\n                    addProduct: {\n                        name: null,\n                        description: null,\n                        price: null,\n                        specialPrice: null,\n                        quantity: null,\n                        visible: null\n                    }\n                }\n            });",
+              "err": {},
+              "uuid": "3d64d6c7-5d84-4883-bafc-fe1188547191",
+              "parentUUID": "b6fc9983-a24a-4789-8940-16c731fe345d",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "3d64d6c7-5d84-4883-bafc-fe1188547191"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 71,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "10.3.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "8.1.1"
+    },
+    "marge": {
+      "options": null,
+      "version": "6.3.2"
+    }
+  }
+}
