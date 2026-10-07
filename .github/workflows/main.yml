@@ -30,19 +30,8 @@ jobs:
       - name: Executar testes
         run: |
           mkdir -p docs
-          set +e
-          npx mocha "test/**/*.test.js" --reporter html > docs/index.html
-          STATUS=$?
-
-          echo "<h2>Resultado da execução</h2>" >> docs/index.html
-
-          if [ $STATUS -eq 0 ]; then
-            echo "<p>Todos os testes foram executados com sucesso.</p>" >> docs/index.html
-          else
-            echo "<p>Foram encontrados testes com falha.</p>" >> docs/index.html
-          fi
-
-          exit 0
+          npx mocha "test/**/*.test.js" --reporter mochawesome --reporter-options reportDir=docs,reportFilename=index,html=true,json=false
+        continue-on-error: true
 
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
