@@ -1,4 +1,5 @@
 const { spec } = require('pactum');
+const assert = require('assert');
 
 const URL = 'http://lojaebac.ebaconline.art.br/graphql';
 
@@ -7,14 +8,14 @@ let token;
 beforeEach(async () => {
     token = await spec()
         .post(URL)
-        .withGraphQLQuery(
-            'mutation AuthUser($email: String, $password: String) {' +
-            ' authUser(email: $email, password: $password) {' +
-            ' success' +
-            ' token' +
-            ' }' +
-            '}'
-        )
+        .withGraphQLQuery(`
+            mutation AuthUser($email: String, $password: String) {
+                authUser(email: $email, password: $password) {
+                    success
+                    token
+                }
+            }
+        `)
         .withGraphQLVariables({
             email: 'admin@admin.com',
             password: 'admin123'
@@ -26,29 +27,47 @@ describe('Contrato - Categoria', () => {
 
     it('deve validar o contrato do addCategory', async () => {
 
-        await spec()
+        const response = await spec()
             .post(URL)
             .withHeaders('Authorization', token)
-            .withGraphQLQuery(
-                'mutation {' +
-                ' addCategory(' +
-                ' name: "Contrato Categoria M24"' +
-                ' photo: "https://example.com/contrato.jpg"' +
-                ' ) {' +
-                ' name' +
-                ' photo' +
-                ' }' +
-                '}'
-            )
-            .expectStatus(200)
-            .expectJsonMatch({
-                data: {
-                    addCategory: {
-                        name: null,
-                        photo: null
+            .withGraphQLQuery(`
+                mutation {
+                    addCategory(
+                        name: "Contrato Categoria M24"
+                        photo: "https://example.com/categoria.jpg"
+                    ) {
+                        name
+                        photo
                     }
                 }
-            });
+            `)
+            .expectStatus(200)
+            .toss();
+
+        assert.ok(!response.body.errors, 'A mutation retornou errors');
+
+        assert.ok(response.body.data, 'A resposta não possui data');
+
+        assert.ok(
+            response.body.data.addCategory,
+            'addCategory não foi retornado'
+        );
+
+        assert.ok(
+            Object.prototype.hasOwnProperty.call(
+                response.body.data.addCategory,
+                'name'
+            ),
+            'O campo name não foi retornado'
+        );
+
+        assert.ok(
+            Object.prototype.hasOwnProperty.call(
+                response.body.data.addCategory,
+                'photo'
+            ),
+            'O campo photo não foi retornado'
+        );
     });
 
 });

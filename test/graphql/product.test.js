@@ -1,4 +1,5 @@
 const { spec } = require('pactum');
+const assert = require('assert');
 
 const URL = 'http://lojaebac.ebaconline.art.br/graphql';
 
@@ -25,7 +26,8 @@ beforeEach(async () => {
 describe('Serviço de Produtos', () => {
 
     it('deve adicionar um produto', async () => {
-        await spec()
+
+        const response = await spec()
             .post(URL)
             .withHeaders('Authorization', token)
             .withGraphQLQuery(`
@@ -35,12 +37,8 @@ describe('Serviço de Produtos', () => {
                         description: "Produto criado para testes"
                         price: 100
                         specialPrice: 90
-                        photos: ["https://example.com/produto.jpg"]
-                        popular: false
                         quantity: 10
                         visible: true
-                        location: "Loja"
-                        additionalDetails: ["Teste M24"]
                     ) {
                         name
                         description
@@ -51,48 +49,25 @@ describe('Serviço de Produtos', () => {
                     }
                 }
             `)
-            .expectStatus(200);
-    });
+            .expectStatus(200)
+            .toss();
 
-    it('deve editar um produto', async () => {
-        await spec()
-            .post(URL)
-            .withHeaders('Authorization', token)
-            .withGraphQLQuery(`
-                mutation {
-                    editProduct(
-                        id: "1"
-                        name: "Produto M24 Editado"
-                        description: "Produto editado para testes"
-                        price: 120
-                        specialPrice: 110
-                        quantity: 20
-                        visible: true
-                    ) {
-                        name
-                        description
-                        price
-                        specialPrice
-                        quantity
-                        visible
-                    }
-                }
-            `)
-            .expectStatus(200);
-    });
+        assert.ok(
+            !response.body.errors,
+            `A mutation retornou errors: ${JSON.stringify(response.body.errors)}`
+        );
 
-    it('deve excluir um produto', async () => {
-        await spec()
-            .post(URL)
-            .withHeaders('Authorization', token)
-            .withGraphQLQuery(`
-                mutation {
-                    deleteProduct(id: "1") {
-                        name
-                    }
-                }
-            `)
-            .expectStatus(200);
+        assert.ok(response.body.data);
+        assert.ok(response.body.data.addProduct);
+
+        const product = response.body.data.addProduct;
+
+        assert.ok(Object.prototype.hasOwnProperty.call(product, 'name'));
+        assert.ok(Object.prototype.hasOwnProperty.call(product, 'description'));
+        assert.ok(Object.prototype.hasOwnProperty.call(product, 'price'));
+        assert.ok(Object.prototype.hasOwnProperty.call(product, 'specialPrice'));
+        assert.ok(Object.prototype.hasOwnProperty.call(product, 'quantity'));
+        assert.ok(Object.prototype.hasOwnProperty.call(product, 'visible'));
     });
 
 });

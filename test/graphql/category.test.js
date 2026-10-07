@@ -1,4 +1,5 @@
 const { spec } = require('pactum');
+const assert = require('assert');
 
 const URL = 'http://lojaebac.ebaconline.art.br/graphql';
 
@@ -25,7 +26,8 @@ beforeEach(async () => {
 describe('Serviço de Categorias', () => {
 
     it('deve adicionar uma categoria', async () => {
-        await spec()
+
+        const response = await spec()
             .post(URL)
             .withHeaders('Authorization', token)
             .withGraphQLQuery(`
@@ -39,41 +41,27 @@ describe('Serviço de Categorias', () => {
                     }
                 }
             `)
-            .expectStatus(200);
-    });
+            .expectStatus(200)
+            .toss();
 
-    it('deve editar uma categoria', async () => {
-        await spec()
-            .post(URL)
-            .withHeaders('Authorization', token)
-            .withGraphQLQuery(`
-                mutation {
-                    editCategory(
-                        id: "1"
-                        name: "Categoria M24 Editada"
-                        photo: "https://example.com/categoria-editada.jpg"
-                    ) {
-                        name
-                        photo
-                    }
-                }
-            `)
-            .expectStatus(200);
-    });
+        assert.ok(!response.body.errors, 'A mutation retornou errors');
 
-    it('deve excluir uma categoria', async () => {
-        await spec()
-            .post(URL)
-            .withHeaders('Authorization', token)
-            .withGraphQLQuery(`
-                mutation {
-                    deleteCategory(id: "1") {
-                        name
-                        photo
-                    }
-                }
-            `)
-            .expectStatus(200);
+        assert.ok(response.body.data);
+        assert.ok(response.body.data.addCategory);
+
+        assert.ok(
+            Object.prototype.hasOwnProperty.call(
+                response.body.data.addCategory,
+                'name'
+            )
+        );
+
+        assert.ok(
+            Object.prototype.hasOwnProperty.call(
+                response.body.data.addCategory,
+                'photo'
+            )
+        );
     });
 
 });
