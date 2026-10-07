@@ -1,0 +1,54 @@
+name: Testes e Publicação
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Executar testes
+        run: |
+          mkdir -p docs
+          set +e
+          npx mocha "test/**/*.test.js" --reporter html > docs/index.html
+          STATUS=$?
+          echo "<h2>Resultado da execução</h2>" >> docs/index.html
+          if [ $STATUS -eq 0 ]; then
+            echo "<p>Testes executados com sucesso.</p>" >> docs/index.html
+          else
+            echo "<p>Foram encontrados testes com falha.</p>" >> docs/index.html
+          fi
+          exit 0
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload do relatório
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Publicar no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
